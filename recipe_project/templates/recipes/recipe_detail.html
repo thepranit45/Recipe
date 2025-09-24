@@ -1,0 +1,104 @@
+<!-- templates\recipes\recipe_detail.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <!-- Recipe Details -->
+        <div class="col-lg-8">
+            <div class="card shadow">
+                {% if recipe.image %}
+                    <img src="{{ recipe.image.url }}" class="card-img-top" style="height: 400px; object-fit: cover;" alt="{{ recipe.title }}">
+                {% endif %}
+                
+                <div class="card-body">
+                    <h1 class="card-title">{{ recipe.title }}</h1>
+                    <p class="text-muted">{{ recipe.description }}</p>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-3 text-center">
+                            <i class="fas fa-clock text-primary fa-2x"></i>
+                            <p class="mt-2"><strong>{{ recipe.total_time }} mins</strong></p>
+                            <small class="text-muted">Total Time</small>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <i class="fas fa-users text-success fa-2x"></i>
+                            <p class="mt-2"><strong>{{ recipe.servings }}</strong></p>
+                            <small class="text-muted">Servings</small>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <i class="fas fa-signal text-warning fa-2x"></i>
+                            <p class="mt-2"><strong>{{ recipe.get_difficulty_level_display }}</strong></p>
+                            <small class="text-muted">Difficulty</small>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            {% if recipe.average_rating %}
+                                <div class="h4">{{ recipe.average_rating }}⭐</div>
+                                <small class="text-muted">Rating</small>
+                            {% else %}
+                                <p class="text-muted">No ratings yet</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <h4><i class="fas fa-list"></i> Ingredients</h4>
+                    <div class="mb-4">
+                        {{ recipe.ingredients|linebreaksbr }}
+                    </div>
+                    
+                    <h4><i class="fas fa-utensils"></i> Instructions</h4>
+                    <div class="mb-4">
+                        {{ recipe.instructions|linebreaksbr }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'recipe_update' recipe.pk %}" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Edit Recipe
+                        </a>
+                        <a href="{% url 'recipe_delete' recipe.pk %}" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Delete Recipe
+                        </a>
+                        <a href="{% url 'recipe_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Recipes
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Add Rating Form -->
+            <div class="card shadow mt-4">
+                <div class="card-header">
+                    <h5><i class="fas fa-star"></i> Rate This Recipe</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'add_rating' recipe.pk %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ rating_form.rating.label_tag }}
+                            {{ rating_form.rating }}
+                        </div>
+                        <div class="mb-3">
+                            {{ rating_form.reviewer_name.label_tag }}
+                            {{ rating_form.reviewer_name }}
+                        </div>
+                        <div class="mb-3">
+                            {{ rating_form.review_text.label_tag }}
+                            {{ rating_form.review_text }}
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100">
+                            <i class="fas fa-star"></i> Submit Rating
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

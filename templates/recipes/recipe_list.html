@@ -1,0 +1,78 @@
+<!-- templates\recipes\recipe_list.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 mb-4">Welcome to Recipe Collection!</h1>
+        <p class="lead">Discover and share amazing recipes</p>
+        
+        <!-- Search Form -->
+        <form method="GET" class="row justify-content-center mt-4">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" 
+                           placeholder="Search recipes..." value="{{ search_query }}">
+                    <button class="btn btn-light" type="submit">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Recipe Cards -->
+<div class="container my-5">
+    <div class="row">
+        {% for recipe in recipes %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card recipe-card h-100">
+                    {% if recipe.image %}
+                        <img src="{{ recipe.image.url }}" class="card-img-top recipe-image" alt="{{ recipe.title }}">
+                    {% else %}
+                        <div class="recipe-image bg-light d-flex align-items-center justify-content-center">
+                            <i class="fas fa-utensils fa-3x text-muted"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">{{ recipe.title }}</h5>
+                        <p class="card-text">{{ recipe.description|truncatewords:15 }}</p>
+                        
+                        <div class="mb-2">
+                            {% if recipe.category %}
+                                <span class="badge bg-secondary">{{ recipe.category.name }}</span>
+                            {% endif %}
+                            <span class="badge bg-info">{{ recipe.get_difficulty_level_display }}</span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="far fa-clock"></i> {{ recipe.total_time }} mins
+                                | <i class="fas fa-users"></i> {{ recipe.servings }} servings
+                            </small>
+                        </div>
+                        
+                        <div class="btn-group w-100">
+                            <a href="{% url 'recipe_detail' recipe.pk %}" class="btn btn-primary">View</a>
+                            <a href="{% url 'recipe_update' recipe.pk %}" class="btn btn-outline-secondary">Edit</a>
+                            <a href="{% url 'recipe_delete' recipe.pk %}" class="btn btn-outline-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-utensils fa-4x text-muted mb-3"></i>
+                <h4>No recipes found! 🍽️</h4>
+                <p class="text-muted">Be the first to add a delicious recipe!</p>
+                <a href="{% url 'recipe_create' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus"></i> Add Your First Recipe
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

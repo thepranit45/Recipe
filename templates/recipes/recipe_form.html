@@ -1,0 +1,95 @@
+<!-- templates\recipes\recipe_form.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3><i class="fas fa-plus-circle"></i> {{ action }} Recipe</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label class="form-label">Recipe Title</label>
+                                    {{ form.title }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Category</label>
+                                    {{ form.category }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            {{ form.description }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Recipe Image</label>
+                            {{ form.image }}
+                            <div class="form-text">Upload a photo of your finished recipe</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Prep Time (min)</label>
+                                    {{ form.prep_time }}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Cook Time (min)</label>
+                                    {{ form.cook_time }}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Servings</label>
+                                    {{ form.servings }}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Difficulty</label>
+                                    {{ form.difficulty_level }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Ingredients</label>
+                            {{ form.ingredients }}
+                            <div class="form-text">List each ingredient on a new line</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Instructions</label>
+                            {{ form.instructions }}
+                            <div class="form-text">Step-by-step cooking instructions</div>
+                        </div>
+                        
+                        <div class="text-end">
+                            <a href="{% url 'recipe_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> {{ action }} Recipe
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
